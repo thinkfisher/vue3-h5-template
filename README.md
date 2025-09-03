@@ -41,19 +41,17 @@
 - [x] 开发环境调试面板
 - [x] 生产环境 CDN 依赖
 
-
-
-## 在线预览Preview
-
-👓 [点击这里](https://yulimchen.github.io/vue3-h5-template/)（PC浏览器请切换手机端模式）
-
-
-
-
 ## 截图
 
+![](docs/assets/img/Snipaste_2025-09-03_13-39-07.png)
+![](docs/assets/img/Snipaste_2025-09-03_13-40-29.png)
+![](docs/assets/img/Snipaste_2025-09-03_13-40-46.png)
+![](docs/assets/img/Snipaste_2025-09-03_13-40-58.png)
+![](docs/assets/img/Snipaste_2025-09-03_13-41-53.png)
+![](docs/assets/img/Snipaste_2025-09-03_13-42-22.png)
+![](docs/assets/img/Snipaste_2025-09-03_13-42-32.png)
 ![](docs/assets/img/Snipaste_2023-05-04_21-52-10.png)
-
+![](docs/assets/img/Snipaste_2023-02-07_21-57-33.png)
 
 
 ## 运行项目
