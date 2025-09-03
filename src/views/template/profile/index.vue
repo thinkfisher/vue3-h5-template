@@ -134,7 +134,7 @@ const goToAddress = () => {
 
 // 跳转到优惠券页面
 const goToCoupons = () => {
-  showSuccessToast("跳转到优惠券页面");
+  router.push("/coupons");
 };
 
 // 联系客服

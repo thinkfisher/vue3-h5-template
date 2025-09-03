@@ -133,6 +133,14 @@ const routes = [
         }
       },
       {
+        path: "coupons",
+        name: "Coupons",
+        component: () => import("@/views/template/coupons/index.vue"),
+        meta: {
+          title: "我的优惠券"
+        }
+      },
+      {
         path: "tools",
         name: "Tools",
         component: () => import("@/views/tools/index.vue"),

@@ -395,7 +395,13 @@ const noGoodsImage = new URL("/src/assets/goods/no-goods.png", import.meta.url)
   .href;
 const goods1Image = new URL("/src/assets/goods/goods1.png", import.meta.url)
   .href;
+const goods2Image = new URL("/src/assets/goods/goods2.png", import.meta.url)
+  .href;
 const goods3Image = new URL("/src/assets/goods/goods3.png", import.meta.url)
+  .href;
+const goods4Image = new URL("/src/assets/goods/goods4.png", import.meta.url)
+  .href;
+const goods5Image = new URL("/src/assets/goods/goods5.png", import.meta.url)
   .href;
 const goods6Image = new URL("/src/assets/goods/goods6.png", import.meta.url)
   .href;
@@ -444,6 +450,14 @@ const products = ref([
     ]
   },
   {
+    id: 2,
+    name: "液化气减压阀",
+    category: "parts",
+    image: goods2Image,
+    price: 89,
+    originalPrice: 129
+  },
+  {
     id: 3,
     name: "液化气软管",
     category: "parts",
@@ -453,6 +467,22 @@ const products = ref([
       { id: 6, name: "2米", price: 78, originalPrice: 118 },
       { id: 7, name: "3米", price: 108, originalPrice: 158 }
     ]
+  },
+  {
+    id: 4,
+    name: "YSP50型液化气瓶",
+    category: "gas",
+    image: goods5Image,
+    price: 399,
+    originalPrice: 499
+  },
+  {
+    id: 5,
+    name: "液化气报警器",
+    category: "parts",
+    image: goods4Image,
+    price: 158,
+    originalPrice: 198
   },
   {
     id: 6,
@@ -718,25 +748,34 @@ const confirmSpecChange = () => {
   );
   if (!spec) return;
 
-  // 更新购物车项
-  currentCartItem.value.specId = spec.id;
-  currentCartItem.value.specName = spec.name;
-  currentCartItem.value.price = spec.price;
-  currentCartItem.value.originalPrice = spec.originalPrice;
-
-  // 保存到本地存储
-  localStorage.setItem("cartItems", JSON.stringify(cartItems.value));
-
-  // 触发存储事件，通知其他页面更新购物车数量
-  window.dispatchEvent(
-    new StorageEvent("storage", {
-      key: "cartItems",
-      newValue: JSON.stringify(cartItems.value)
-    })
+  // 通过ID在购物车数组中查找并更新商品，确保更新的是正确的商品
+  const itemIndex = cartItems.value.findIndex(
+    item => item.id === currentCartItem.value.id
   );
 
-  showSpecPopup.value = false;
-  showSuccessToast("规格更换成功");
+  if (itemIndex !== -1) {
+    // 更新购物车项
+    cartItems.value[itemIndex].specId = spec.id;
+    cartItems.value[itemIndex].specName = spec.name;
+    cartItems.value[itemIndex].price = spec.price;
+    cartItems.value[itemIndex].originalPrice = spec.originalPrice;
+
+    // 保存到本地存储
+    localStorage.setItem("cartItems", JSON.stringify(cartItems.value));
+
+    // 触发存储事件，通知其他页面更新购物车数量
+    window.dispatchEvent(
+      new StorageEvent("storage", {
+        key: "cartItems",
+        newValue: JSON.stringify(cartItems.value)
+      })
+    );
+
+    showSpecPopup.value = false;
+    showSuccessToast("规格更换成功");
+  } else {
+    showFailToast("商品不存在，请刷新页面重试");
+  }
 };
 
 const checkout = () => {
@@ -785,11 +824,9 @@ const loadCartItems = () => {
       if (item.selected === undefined) {
         item.selected = true;
       }
-      // 确保规格信息完整性，如果没有规格名称但有规格ID，尝试补充
-      if (item.specId && !item.specName) {
-        const product = products.value.find(
-          p => p.id === item.productId || p.name === item.productName
-        );
+      // 只在规格名称完全缺失时才尝试补充，避免覆盖已有的规格信息
+      if (item.specId && (!item.specName || item.specName === "")) {
+        const product = products.value.find(p => p.id === item.productId);
         if (product && product.specs) {
           const spec = product.specs.find(s => s.id === item.specId);
           if (spec) {
